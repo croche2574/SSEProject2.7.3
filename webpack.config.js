@@ -82,14 +82,7 @@ module.exports = {
     },
     static: {
       directory: path.join(__dirname, './')
-    },
-    proxy: {
-      "/ws": {
-        target: "http://localhost:443",
-        changeOrigin: true,
-        secure: true,
-      },
-    },
+    }
   },
   optimization: {
     minimize: true,
