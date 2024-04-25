@@ -3,8 +3,6 @@ const path = require('path')
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserWebpackPlugin = require("terser-webpack-plugin");
-const WebpackPwaManifest = require('webpack-pwa-manifest')
-const { GenerateSW } = require("workbox-webpack-plugin");
 const fs = require('fs');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -64,58 +62,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Item FindAR',
+      title: 'SSE Quiz App',
       template: './src/index.html',
       inject: 'body'
-    }),
-    new WebpackPwaManifest({
-      name: 'Item FindAR',
-      short_name: 'FindAR',
-      description: 'An App for finding and identifying food products while shopping',
-      background_color: '#848484',
-      theme_color: '#1976d2',
-      orientation: 'portrait',
-      publicPath: '/' ,
-      icons: [
-        {
-          src: path.resolve('src/assets/icon.png'),
-          sizes: [384, 512], // multiple sizes
-          destination: path.join('icons', 'android'),
-        },
-        {
-          src: path.resolve('src/assets/large-icon.png'),
-          size: '1024x1024', // you can also use the specifications pattern
-          destination: path.join('icons', 'android'),
-        },
-        {
-          src: path.resolve('src/assets/maskable-icon.png'),
-          size: '1024x1024',
-          purpose: 'maskable',
-          destination: path.join('icons', 'android'),
-        }
-      ]
-    }),
-    new GenerateSW({
-      swDest: "sw.js",
-      maximumFileSizeToCacheInBytes: 10000000,
-      additionalManifestEntries: [
-        {
-          "url": "/offline",
-          "revision": genRanHex()
-        }
-      ],
-      runtimeCaching: [
-        {
-          urlPattern: /^https:\/\/([\w+\.\-]+www\.itemfindar\.net)(|\/.*)$/,
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'core',
-            precacheFallback: {
-              fallbackURL: '/offline' // THIS IS THE KEY
-            }
-          }
-        }
-      ]
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: "./assets/models", to: "./assets/models", noErrorOnMissing: true }]
@@ -133,14 +82,6 @@ module.exports = {
     port: 8080,
     client: {
       webSocketURL: "ws://0.0.0.0/ws",
-    },
-    server: {
-      type: 'https',
-      options: {
-        key: fs.readFileSync("cert.key"),
-        cert: fs.readFileSync("cert.crt"),
-        ca: fs.readFileSync("ca.crt"),
-      },
     },
     static: {
       directory: path.join(__dirname, './')
@@ -162,9 +103,3 @@ module.exports = {
     ],
   },
 };
-
-/**
-alias: {
-      three$: path.resolve("./build/three-exports.js"),
-    },
-*/
