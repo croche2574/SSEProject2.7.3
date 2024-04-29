@@ -1,11 +1,13 @@
 import React, { memo, useCallback, useEffect, useState } from "react"
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { Box, AppBar, Drawer, Typography, Toolbar, IconButton, MenuItem, Menu, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ScoreboardIcon from '@mui/icons-material/Scoreboard';
 import QuizIcon from '@mui/icons-material/Quiz';
 import LoginIcon from '@mui/icons-material/Login';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase"
 
 const SideMenu = memo((props) => {
     const { open, toggleMenu, loggedIn } = props
@@ -48,8 +50,30 @@ const SideMenu = memo((props) => {
 
 export const Root = memo((props) => {
     const [loggedIn, setLoggedIn] = useState(true)
+    const [username, setUsername] = useState('')
     const [open, setOpen] = useState(false)
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(null)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                const uid = user.uid;
+                // ...
+                console.log("uid", uid)
+                setLoggedIn(true)
+                setUsername(user.displayName)
+            } else {
+                // User is signed out
+                // ...
+                console.log("user is logged out")
+                setLoggedIn(false)
+            }
+        });
+
+    }, [])
 
     const toggleSideMenu = (newOpen) => () => { setOpen(newOpen) }
 
@@ -59,7 +83,13 @@ export const Root = memo((props) => {
 
     const handleClose = () => {
         setAnchorEl(null);
-        setLoggedIn(false)
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            navigate("/");
+            console.log("Signed out successfully")
+        }).catch((error) => {
+            // An error happened.
+        });
     };
 
     return (
@@ -98,14 +128,14 @@ export const Root = memo((props) => {
                                     id="menu-appbar"
                                     anchorEl={anchorEl}
                                     anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
                                     }}
-                                    keepMounted
                                     transformOrigin={{
                                         vertical: 'top',
-                                        horizontal: 'right',
+                                        horizontal: 'left',
                                     }}
+                                    keepMounted
                                     open={Boolean(anchorEl)}
                                     onClose={handleClose}
                                 >
