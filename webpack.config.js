@@ -77,9 +77,6 @@ module.exports = {
     allowedHosts: 'any',
     open: false,
     port: 8080,
-    client: {
-      webSocketURL: "ws://0.0.0.0/ws",
-    },
     static: {
       directory: path.join(__dirname, './')
     }
