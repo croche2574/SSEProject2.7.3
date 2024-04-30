@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react"
+import React, { memo, useEffect, useState } from "react"
 import {
     Button,
     CssBaseline,
@@ -30,8 +30,13 @@ const Copyright = (props) => {
 export const LoginPage = memo((props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const { error, setError } = props
 
     const theme = createTheme()
+
+    useEffect(() => {
+        setError('')
+    }, [])
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -40,15 +45,22 @@ export const LoginPage = memo((props) => {
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                updateProfile(user, { displayName: username })
                 console.log(user);
-                navigate("/quiz")
                 // ...
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.log(errorCode, errorMessage);
+                switch (errorCode) {
+                    case "auth/invalid-email":
+                        setError("Invalid email. Please try again.")
+                        break;
+                
+                    default:
+                        setError(errorMessage)
+                        break;
+                }
                 // ..
             }
             )
@@ -73,7 +85,7 @@ export const LoginPage = memo((props) => {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <form noValidate sx={{marginTop: theme.spacing(1)}}>
+                    <form noValidate sx={{ marginTop: theme.spacing(1) }}>
                         <TextField
                             onChange={(e) => setEmail(e.target.value)}
                             variant="outlined"
@@ -102,7 +114,7 @@ export const LoginPage = memo((props) => {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            sx={{margin: theme.spacing(3, 0, 2)}}
+                            sx={{ margin: theme.spacing(3, 0, 2) }}
                             onClick={onSubmit}
                         >
                             Sign In
@@ -112,6 +124,11 @@ export const LoginPage = memo((props) => {
                                 <Link component={RouterLink} to="/signup" variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item>
+                                <Typography color="error">{error}</Typography>
                             </Grid>
                         </Grid>
                         <Box mt={5}>

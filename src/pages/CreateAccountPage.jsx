@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth"
 import React, { memo, useState } from "react"
 import { auth } from "../firebase"
 import {
@@ -12,7 +12,7 @@ import {
     Typography,
     createTheme,
 } from "@mui/material"
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 
 const Copyright = (props) => {
@@ -32,6 +32,7 @@ export const CreateAccountPage = memo((props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [username, setUsername] = useState('')
+    const { error, setError } = props
 
     const theme = createTheme()
 
@@ -44,13 +45,20 @@ export const CreateAccountPage = memo((props) => {
                 const user = userCredential.user;
                 updateProfile(user, { displayName: username })
                 console.log(user);
-                navigate("/quiz")
-                // ...
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.log(errorCode, errorMessage);
+                switch (errorCode) {
+                    case "auth/email-already-in-use":
+                        setError("Email already in use. Please try again.")
+                        break;
+                
+                    default:
+                        setError(errorMessage)
+                        break;
+                }
                 // ..
             }
             )
@@ -73,7 +81,7 @@ export const CreateAccountPage = memo((props) => {
             }}>
                 <Box sx={{ margin: theme.spacing(2, 6), display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <Typography component="h1" variant="h5">
-                        Create Account
+                        Sign Up
                     </Typography>
                     <form noValidate sx={{ marginTop: theme.spacing(1) }}>
                         <TextField
@@ -119,13 +127,18 @@ export const CreateAccountPage = memo((props) => {
                             sx={{ margin: theme.spacing(3, 0, 2) }}
                             onClick={onSubmit}
                         >
-                            Sign In
+                            Create Account
                         </Button>
                         <Grid container>
                             <Grid item>
                                 <Link component={RouterLink} to="/" variant="body2">
                                     {"Already have an account? Sign In"}
                                 </Link>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item>
+                                <Typography color="error">{error}</Typography>
                             </Grid>
                         </Grid>
                         <Box mt={5}>

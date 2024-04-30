@@ -1,24 +1,22 @@
-import React, { memo, useCallback, useEffect, useState } from "react"
-import { Outlet, useNavigate } from "react-router-dom"
+import React, { memo, useEffect, useState } from "react"
+import { Outlet, useNavigate, Link as RouterLink } from "react-router-dom"
 import { Box, AppBar, Drawer, Typography, Toolbar, IconButton, MenuItem, Menu, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ScoreboardIcon from '@mui/icons-material/Scoreboard';
 import QuizIcon from '@mui/icons-material/Quiz';
 import LoginIcon from '@mui/icons-material/Login';
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut, sendEmailVerification } from "firebase/auth";
 import { auth } from "../firebase"
 
 const SideMenu = memo((props) => {
     const { open, toggleMenu, loggedIn } = props
 
-
-
     const MenuList = (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleMenu(false)}>
             <List>
                 <ListItem>
-                    <ListItemButton>
+                    <ListItemButton component={RouterLink} to={loggedIn ? "/quiz" : "/"}>
                         <ListItemIcon>
                             {loggedIn ? <QuizIcon /> : <LoginIcon />}
                         </ListItemIcon>
@@ -28,7 +26,7 @@ const SideMenu = memo((props) => {
                     </ListItemButton>
                 </ListItem>
                 <ListItem>
-                    <ListItemButton>
+                    <ListItemButton component={RouterLink} to={"/scoreboard"}>
                         <ListItemIcon>
                             <ScoreboardIcon />
                         </ListItemIcon>
@@ -51,8 +49,11 @@ const SideMenu = memo((props) => {
 export const Root = memo((props) => {
     const [loggedIn, setLoggedIn] = useState(true)
     const [username, setUsername] = useState('')
+    const { setError } = props
+
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -60,11 +61,20 @@ export const Root = memo((props) => {
             if (user) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
-                const uid = user.uid;
                 // ...
-                console.log("uid", uid)
-                setLoggedIn(true)
-                setUsername(user.displayName)
+                console.log(user)
+                if (user.emailVerified) {
+                    setLoggedIn(true)
+                    setUsername(user.displayName)
+                    console.log(user.displayName + " logged in.")
+                    navigate("/quiz")
+                } else {
+                    console.log("Email not verified")
+                    setError("Email not verified")
+                    setLoggedIn(false)
+                    sendEmailVerification(user).then((v) => { console.log("Email sent") })
+                    navigate("/")
+                }
             } else {
                 // User is signed out
                 // ...
