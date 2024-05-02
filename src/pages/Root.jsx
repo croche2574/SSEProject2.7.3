@@ -7,6 +7,7 @@ import ScoreboardIcon from '@mui/icons-material/Scoreboard';
 import QuizIcon from '@mui/icons-material/Quiz';
 import LoginIcon from '@mui/icons-material/Login';
 import { onAuthStateChanged, signOut, sendEmailVerification } from "firebase/auth";
+import { get, getDatabase, orderByKey, query, ref, set } from "firebase/database"
 import { auth } from "../firebase"
 
 const SideMenu = memo((props) => {
@@ -50,11 +51,28 @@ export const Root = memo((props) => {
     const [loggedIn, setLoggedIn] = useState(true)
     const [username, setUsername] = useState('')
     const { setError } = props
+    const userDB = getDatabase()
 
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
 
     const navigate = useNavigate()
+
+    const userExists = (user) => {
+        const userRef = ref(userDB, 'users/' + user.uid)
+        const results = query(userRef, orderByKey())
+        get(results).then((r) => {
+            console.log(r)
+            if (r.val()) {
+                console.log(r.val())
+            } else {
+                set(ref(userDB, 'users/' + user.uid), {
+                    username: user.displayName,
+                    highScore: 0
+                })
+            }
+        })
+    }
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -66,6 +84,7 @@ export const Root = memo((props) => {
                 if (user.emailVerified) {
                     setLoggedIn(true)
                     setUsername(user.displayName)
+                    userExists(user)
                     console.log(user.displayName + " logged in.")
                     navigate("/quiz")
                 } else {

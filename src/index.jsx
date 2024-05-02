@@ -11,8 +11,8 @@ import './styles.css'
 
 const RouteCompontent = (props) => {
     const [error, setError] = useState('')
-    return (
 
+    return (
         <Routes>
             <Route path="/" element={<Root setError={setError} /> }>
                 <Route index element={<LoginPage error={error} setError={setError} /> } errorElement={<ErrorPage />} />
@@ -21,7 +21,6 @@ const RouteCompontent = (props) => {
                 <Route path="/scoreboard" element={<ScorePage />} errorElement={<ErrorPage />} />
             </Route>
         </Routes>
-
     )
 }
 

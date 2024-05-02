@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import React, { memo, useState } from "react"
 import { auth } from "../firebase"
 import {
@@ -12,7 +12,8 @@ import {
     Typography,
     createTheme,
 } from "@mui/material"
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import { PageBackground } from "../components/PageBackground";
 
 
 const Copyright = (props) => {
@@ -44,7 +45,7 @@ export const CreateAccountPage = memo((props) => {
                 // Signed in
                 const user = userCredential.user;
                 updateProfile(user, { displayName: username })
-                console.log(user);
+                console.log(user)
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -54,7 +55,7 @@ export const CreateAccountPage = memo((props) => {
                     case "auth/email-already-in-use":
                         setError("Email already in use. Please try again.")
                         break;
-                
+
                     default:
                         setError(errorMessage)
                         break;
@@ -65,88 +66,72 @@ export const CreateAccountPage = memo((props) => {
     }
 
     return (
-        <Grid container component="main" sx={{
-            height: "100vh",
-            backgroundColor: theme.palette.grey[50],
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-        }}>
-            <CssBaseline />
-            <Grid component={Paper} item elevation={1} xs={12} sm={8} md={5} square sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center"
-            }}>
-                <Box sx={{ margin: theme.spacing(2, 6), display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <Typography component="h1" variant="h5">
-                        Sign Up
-                    </Typography>
-                    <form noValidate sx={{ marginTop: theme.spacing(1) }}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="username"
-                            label="User Name"
-                            name="username"
-                            autoComplete="username"
-                            autoFocus
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <TextField
-                            onChange={(e) => setEmail(e.target.value)}
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email"
-                            name="email"
-                            autoComplete="email"
-                        />
-                        <TextField
-                            onChange={(e) => setPassword(e.target.value)}
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            sx={{ margin: theme.spacing(3, 0, 2) }}
-                            onClick={onSubmit}
-                        >
-                            Create Account
-                        </Button>
-                        <Grid container>
-                            <Grid item>
-                                <Link component={RouterLink} to="/" variant="body2">
-                                    {"Already have an account? Sign In"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                        <Grid container>
-                            <Grid item>
-                                <Typography color="error">{error}</Typography>
-                            </Grid>
-                        </Grid>
-                        <Box mt={5}>
-                            <Copyright />
-                        </Box>
-                    </form>
+        <PageBackground>
+            <Typography component="h1" variant="h5">
+                Sign Up
+            </Typography>
+            <form noValidate sx={{ marginTop: theme.spacing(1) }}>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="User Name"
+                    name="username"
+                    autoComplete="username"
+                    autoFocus
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                    onChange={(e) => setEmail(e.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
+                />
+                <TextField
+                    onChange={(e) => setPassword(e.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    sx={{ margin: theme.spacing(3, 0, 2) }}
+                    onClick={onSubmit}
+                >
+                    Create Account
+                </Button>
+                <Grid container>
+                    <Grid item>
+                        <Link component={RouterLink} to="/" variant="body2">
+                            {"Already have an account? Sign In"}
+                        </Link>
+                    </Grid>
+                </Grid>
+                <Grid container>
+                    <Grid item>
+                        <Typography color="error">{error}</Typography>
+                    </Grid>
+                </Grid>
+                <Box mt={5}>
+                    <Copyright />
                 </Box>
-            </Grid>
-        </Grid>
+            </form>
+        </PageBackground>
     );
 })
