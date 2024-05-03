@@ -1,5 +1,6 @@
 import { useRouteError } from "react-router-dom";
-import React, { memo, useEffect } from "react"
+import React, { memo } from "react"
+import { Typography } from "@mui/material";
 
 export const ErrorPage = memo((props) => {
   const error = useRouteError();
@@ -7,7 +8,7 @@ export const ErrorPage = memo((props) => {
 
   return (
     <div id="error-page">
-      <h1>Oops!</h1>
+      <Typography component="h1" variant="h5">Oops!</Typography>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
         <i>{error.statusText || error.message}</i>

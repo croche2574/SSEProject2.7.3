@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react"
+import React, { memo, useCallback, useEffect, useState } from "react"
 import { Outlet, useNavigate, Link as RouterLink } from "react-router-dom"
 import { Box, AppBar, Drawer, Typography, Toolbar, IconButton, MenuItem, Menu, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
@@ -9,6 +9,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import { onAuthStateChanged, signOut, sendEmailVerification } from "firebase/auth";
 import { get, getDatabase, orderByKey, query, ref, set } from "firebase/database"
 import { auth } from "../firebase"
+import { PageBackground } from "../components/PageBackground"
 
 const SideMenu = memo((props) => {
     const { open, toggleMenu, loggedIn } = props
@@ -106,11 +107,11 @@ export const Root = memo((props) => {
 
     const toggleSideMenu = (newOpen) => () => { setOpen(newOpen) }
 
-    const handleMenu = (event) => {
+    const handleMenu = useCallback((event) => {
         setAnchorEl(event.currentTarget);
-    };
+    })
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setAnchorEl(null);
         signOut(auth).then(() => {
             // Sign-out successful.
@@ -118,8 +119,9 @@ export const Root = memo((props) => {
             console.log("Signed out successfully")
         }).catch((error) => {
             // An error happened.
-        });
-    };
+            console.log(error)
+        })
+    }, [auth])
 
     return (
         <>
@@ -179,7 +181,9 @@ export const Root = memo((props) => {
             </Box>
             <SideMenu open={open} setOpen={setOpen} loggedIn={loggedIn} toggleMenu={toggleSideMenu} />
             <div id="content">
-                <Outlet />
+                <PageBackground>
+                    <Outlet />
+                </PageBackground>
             </div>
         </>
     )

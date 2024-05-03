@@ -3,31 +3,15 @@ import React, { memo, useState } from "react"
 import { auth } from "../firebase"
 import {
     Button,
-    CssBaseline,
     TextField,
     Link,
     Grid,
     Box,
-    Paper,
     Typography,
     createTheme,
 } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom";
-import { PageBackground } from "../components/PageBackground";
-
-
-const Copyright = (props) => {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {"Copyright © "}
-            <Link color="inherit" href="https://github.com/nhill1113/SSEProject2.7.3">
-                SSE Quiz Project
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
+import { Copyright } from "../components/Copyright";
 
 export const CreateAccountPage = memo((props) => {
     const [email, setEmail] = useState('')
@@ -60,13 +44,12 @@ export const CreateAccountPage = memo((props) => {
                         setError(errorMessage)
                         break;
                 }
-                // ..
             }
             )
     }
 
     return (
-        <PageBackground>
+        <>
             <Typography component="h1" variant="h5">
                 Sign Up
             </Typography>
@@ -132,6 +115,6 @@ export const CreateAccountPage = memo((props) => {
                     <Copyright />
                 </Box>
             </form>
-        </PageBackground>
+        </>
     );
 })

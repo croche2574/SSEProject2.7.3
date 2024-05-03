@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react"
 import {
     Button,
-    CssBaseline,
     TextField,
     Link,
     Grid,
@@ -14,7 +13,6 @@ import { Link as RouterLink } from 'react-router-dom'
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../firebase"
 import { Copyright } from "../components/Copyright"
-import { PageBackground } from "../components/PageBackground"
 
 export const LoginPage = memo((props) => {
     const [email, setEmail] = useState('')
@@ -56,7 +54,7 @@ export const LoginPage = memo((props) => {
     }
 
     return (
-        <PageBackground>
+        <>
             <Typography component="h1" variant="h5">
                 Sign in
             </Typography>
@@ -110,6 +108,6 @@ export const LoginPage = memo((props) => {
                     <Copyright />
                 </Box>
             </form>
-        </PageBackground>
+        </>
     );
 })
