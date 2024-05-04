@@ -1,4 +1,4 @@
-import React, { StrictMode, useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Root } from "./pages/Root"
@@ -10,12 +10,19 @@ import { ErrorPage } from "./pages/ErrorPage"
 import './styles.css'
 import { onChildChanged, ref, getDatabase } from "firebase/database";
 
+/**
+ * Routing component, controls the visible page on the client
+ * @component
+ * @param {Object} props - Unused
+ * @returns {JSX.Element}
+ */
 const RouteCompontent = (props) => {
     const [error, setError] = useState('')
     const [uid, setUid] = useState('')
     const [highscore, setHighscore] = useState(0)
     const userDB = getDatabase()
 
+    // Side Effect (runs every child update) that updates the user's current high score
     useEffect(() => {
         onChildChanged(ref(userDB, 'users' + uid), (snapshot) => {
             setHighscore(snapshot.val().highscore)

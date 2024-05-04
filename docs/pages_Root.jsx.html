@@ -1,4 +1,32 @@
-import React, { memo, useCallback, useEffect, useState } from "react"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/Root.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/Root.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { memo, useCallback, useEffect, useState } from "react"
 import { Outlet, useNavigate, Link as RouterLink } from "react-router-dom"
 import { Box, AppBar, Drawer, Typography, Toolbar, IconButton, MenuItem, Menu, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
@@ -23,36 +51,36 @@ import { PageBackground } from "../components/PageBackground"
 const SideMenu = memo(({ open, toggleMenu, loggedIn }) => {
 
     const MenuList = (
-        <Box sx={{ width: 250 }} role="presentation" onClick={toggleMenu(false)}>
-            <List>
-                <ListItem>
-                    <ListItemButton component={RouterLink} to={loggedIn ? "/quiz" : "/"}>
-                        <ListItemIcon>
-                            {loggedIn ? <QuizIcon /> : <LoginIcon />} 
-                        </ListItemIcon>
-                        <ListItemText>
+        &lt;Box sx={{ width: 250 }} role="presentation" onClick={toggleMenu(false)}>
+            &lt;List>
+                &lt;ListItem>
+                    &lt;ListItemButton component={RouterLink} to={loggedIn ? "/quiz" : "/"}>
+                        &lt;ListItemIcon>
+                            {loggedIn ? &lt;QuizIcon /> : &lt;LoginIcon />} 
+                        &lt;/ListItemIcon>
+                        &lt;ListItemText>
                             {loggedIn ? "Take Quiz" : "Login / Sign Up"}
-                        </ListItemText>
-                    </ListItemButton>
-                </ListItem>
-                <ListItem>
-                    <ListItemButton component={RouterLink} to={"/scoreboard"}>
-                        <ListItemIcon>
-                            <ScoreboardIcon />
-                        </ListItemIcon>
-                        <ListItemText>
+                        &lt;/ListItemText>
+                    &lt;/ListItemButton>
+                &lt;/ListItem>
+                &lt;ListItem>
+                    &lt;ListItemButton component={RouterLink} to={"/scoreboard"}>
+                        &lt;ListItemIcon>
+                            &lt;ScoreboardIcon />
+                        &lt;/ListItemIcon>
+                        &lt;ListItemText>
                             Scoreboard
-                        </ListItemText>
-                    </ListItemButton>
-                </ListItem>
-            </List>
-        </Box>
+                        &lt;/ListItemText>
+                    &lt;/ListItemButton>
+                &lt;/ListItem>
+            &lt;/List>
+        &lt;/Box>
     )
 
     return (
-        <Drawer open={open} onClose={toggleMenu(false)}>
+        &lt;Drawer open={open} onClose={toggleMenu(false)}>
             {MenuList}
-        </Drawer>
+        &lt;/Drawer>
     )
 })
 
@@ -158,11 +186,11 @@ export const Root = memo(({setError, setUid}) => {
     }, [auth])
 
     return (
-        <>
-            <Box style={{ zIndex: 99999 }}>
-                <AppBar style={{ position: 'fixed', top: 0 }}>
-                    <Toolbar>
-                        <IconButton
+        &lt;>
+            &lt;Box style={{ zIndex: 99999 }}>
+                &lt;AppBar style={{ position: 'fixed', top: 0 }}>
+                    &lt;Toolbar>
+                        &lt;IconButton
                             onClick={toggleSideMenu(true)}
                             size="large"
                             edge="start"
@@ -170,16 +198,16 @@ export const Root = memo(({setError, setUid}) => {
                             aria-label="menu"
                             sx={{ mr: 2 }}
                         >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            &lt;MenuIcon />
+                        &lt;/IconButton>
+                        &lt;Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             SSE Quiz
-                        </Typography>
+                        &lt;/Typography>
 
-                        {loggedIn && (
+                        {loggedIn &amp;&amp; (
 
-                            <div>
-                                <IconButton
+                            &lt;div>
+                                &lt;IconButton
                                     size="large"
                                     aria-label="account of current user"
                                     aria-controls="menu-appbar"
@@ -187,9 +215,9 @@ export const Root = memo(({setError, setUid}) => {
                                     onClick={handleMenu}
                                     color="inherit"
                                 >
-                                    <AccountCircleIcon />
-                                </IconButton>
-                                <Menu
+                                    &lt;AccountCircleIcon />
+                                &lt;/IconButton>
+                                &lt;Menu
                                     id="menu-appbar"
                                     anchorEl={anchorEl}
                                     anchorOrigin={{
@@ -204,21 +232,43 @@ export const Root = memo(({setError, setUid}) => {
                                     open={Boolean(anchorEl)}
                                     onClose={handleClose}
                                 >
-                                    <MenuItem onClick={logoutHandler}>Sign Out</MenuItem>
-                                </Menu>
-                            </div>
+                                    &lt;MenuItem onClick={logoutHandler}>Sign Out&lt;/MenuItem>
+                                &lt;/Menu>
+                            &lt;/div>
 
 
                         )}
-                    </Toolbar>
-                </AppBar>
-            </Box>
-            <SideMenu open={open} setOpen={setOpen} loggedIn={loggedIn} toggleMenu={toggleSideMenu} />
-            <div id="content">
-                <PageBackground>
-                    <Outlet />
-                </PageBackground>
-            </div>
-        </>
+                    &lt;/Toolbar>
+                &lt;/AppBar>
+            &lt;/Box>
+            &lt;SideMenu open={open} setOpen={setOpen} loggedIn={loggedIn} toggleMenu={toggleSideMenu} />
+            &lt;div id="content">
+                &lt;PageBackground>
+                    &lt;Outlet />
+                &lt;/PageBackground>
+            &lt;/div>
+        &lt;/>
     )
-})
+})</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Copyright">Copyright</a></li><li><a href="global.html#CreateAccountPage">CreateAccountPage</a></li><li><a href="global.html#ErrorPage">ErrorPage</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#PageBackground">PageBackground</a></li><li><a href="global.html#QuizPage">QuizPage</a></li><li><a href="global.html#Root">Root</a></li><li><a href="global.html#RouteCompontent">RouteCompontent</a></li><li><a href="global.html#ScorePage">ScorePage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri May 03 2024 23:29:39 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

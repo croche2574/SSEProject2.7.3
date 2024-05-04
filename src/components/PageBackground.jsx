@@ -6,6 +6,18 @@ import {
     Paper,
     createTheme
 } from "@mui/material"
+
+/**
+ * Component that renders background and main box on all pages
+ * 
+ * @component
+ * @param {JSX.Element} children - The content that PageBackground wraps
+ * @returns {JSX.Element}
+ * 
+ * @example
+ * // Wrap around page content
+ * <PageBackground>{content}</PageBackground>
+ */
 export const PageBackground = memo(({children}) => {
     const theme = createTheme()
     
