@@ -63,7 +63,7 @@ export const ScorePage = memo((props) => {
     const userRef = ref(userDB, 'users')
 
     useEffect(() => {
-        get(ref(userDB, 'users')).then((values) => {
+        get(userRef).then((values) => {
             setUserScores(Object.values(values.val()).sort(((b, a) => { return a.highScore - b.highScore })))
         })
     }, [])

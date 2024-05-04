@@ -7,7 +7,7 @@ import ScoreboardIcon from '@mui/icons-material/Scoreboard';
 import QuizIcon from '@mui/icons-material/Quiz';
 import LoginIcon from '@mui/icons-material/Login';
 import { onAuthStateChanged, signOut, sendEmailVerification } from "firebase/auth";
-import { get, getDatabase, orderByKey, query, ref, set } from "firebase/database"
+import { get, getDatabase, onChildChanged, orderByKey, query, ref, set } from "firebase/database"
 import { auth } from "../firebase"
 import { PageBackground } from "../components/PageBackground"
 
@@ -48,10 +48,9 @@ const SideMenu = memo((props) => {
     )
 })
 
-export const Root = memo((props) => {
+export const Root = memo(({setError, setUid}) => {
     const [loggedIn, setLoggedIn] = useState(true)
     const [username, setUsername] = useState('')
-    const { setError } = props
     const userDB = getDatabase()
 
     const [open, setOpen] = useState(false)
@@ -60,6 +59,8 @@ export const Root = memo((props) => {
     const navigate = useNavigate()
 
     const userExists = (user) => {
+        console.log(user.uid)
+        setUid(user.uid)
         const userRef = ref(userDB, 'users/' + user.uid)
         const results = query(userRef, orderByKey())
         get(results).then((r) => {
@@ -67,14 +68,14 @@ export const Root = memo((props) => {
             if (r.val()) {
                 console.log(r.val())
             } else {
-                set(ref(userDB, 'users/' + user.uid), {
+                set(userRef, {
                     username: user.displayName,
                     highScore: 0
                 })
             }
         })
     }
-
+ 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -112,7 +113,10 @@ export const Root = memo((props) => {
     })
 
     const handleClose = useCallback(() => {
-        setAnchorEl(null);
+        setAnchorEl(null)
+    }, [])
+
+    const logoutHandler = useCallback(() => {
         signOut(auth).then(() => {
             // Sign-out successful.
             navigate("/");
@@ -121,6 +125,7 @@ export const Root = memo((props) => {
             // An error happened.
             console.log(error)
         })
+        handleClose()
     }, [auth])
 
     return (
@@ -170,7 +175,7 @@ export const Root = memo((props) => {
                                     open={Boolean(anchorEl)}
                                     onClose={handleClose}
                                 >
-                                    <MenuItem onClick={handleClose}>Sign Out</MenuItem>
+                                    <MenuItem onClick={logoutHandler}>Sign Out</MenuItem>
                                 </Menu>
                             </div>
 

@@ -6,8 +6,7 @@ import {
     Grid,
     Box,
     Typography,
-    createTheme,
-    Paper,
+    createTheme
 } from "@mui/material"
 import { Link as RouterLink } from 'react-router-dom'
 import { signInWithEmailAndPassword } from "firebase/auth"
